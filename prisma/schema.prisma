@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Guest {
+  id                 String   @id @default(cuid())
+  name               String
+  normalizedName     String   @unique
+  companionName      String?
+  companionConfirmed Boolean  @default(false)
+  status             String   @default("CONFIRMED")
+  origin             String   @default("RSVP")
+  publicNote         String?
+  internalNotes      String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  confirmedAt        DateTime?
+
+  @@index([status])
+  @@map("guests")
+}

@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: arthur-aniversario-db
+    restart: unless-stopped
+    ports:
+      - "55432:5432"
+    environment:
+      POSTGRES_USER: arthur
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-arthur_local_dev}
+      POSTGRES_DB: arthur_party
+    volumes:
+      - arthur_party_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U arthur -d arthur_party"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  arthur_party_data:
